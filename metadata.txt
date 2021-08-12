@@ -1,0 +1,12 @@
+[general]
+name=URSCAPE
+qgisMinimumVersion=3.0
+description= URSCAPE
+version=21.8.11
+author=Quach Dong Thang
+email=quachdongthang@gmai.com
+homepage= https://thangqd.github.io
+tracker = 
+repository=
+experimental=False
+deprecated=False

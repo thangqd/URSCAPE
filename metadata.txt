@@ -7,6 +7,6 @@ author=Quach Dong Thang
 email=quachdongthang@gmai.com
 homepage= https://thangqd.github.io
 tracker = https://github.com/thangqd/URSCAPE/issues
-repository=https://github.com/thangqd/HCMGIS
+repository=https://github.com/thangqd/URSCAPE
 experimental=False
 deprecated=False

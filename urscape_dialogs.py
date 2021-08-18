@@ -33,8 +33,11 @@ except:
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/forms")
 
 from urscape_creategrid_form import *
+from urscape_hub_form import *
+from urscape_raster_form import *
+from urscape_build_form import *
+from urscape_pop_form import *
 from urscape_importer_form import *
-
 
 
 # ------------------------------------------------------------------------------
@@ -159,6 +162,162 @@ class urscape_creategrid_dialog(urscape_dialog, Ui_urscape_creategrid_form):
                 QMessageBox.critical(self.iface.mainWindow(), "Create Grid", message)	
             else: 
                 self.LblStatus.setText('Completed')   
+        return
+
+# --------------------------------------------------------
+#    urscape Hub Distance
+# --------------------------------------------------------
+class urscape_hub_dialog(urscape_dialog, Ui_urscape_hub_form):		
+    def __init__(self, iface):
+        urscape_dialog.__init__(self, iface)		
+        self.setupUi(self)	
+        self.CboGrid.setFilters(QgsMapLayerProxyModel.PointLayer)
+        self.CboHub.setCurrentIndex(-1) 
+        self.CboHub.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.CboHubAttribute.setLayer (self.CboHub.currentLayer () )
+        self.CboHub.activated.connect(self.update_field)
+
+        self.BtnApplyClose.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.run)
+        self.urscape_set_status_bar(self.status,self.LblStatus)	
+        self.urscape_initialize_spatial_output_file_widget(self.output_file_name,'hub')
+
+    def update_field(self):
+        self.CboHubAttribute.setLayer (self.CboHub.currentLayer())	
+        if (self.CboHubAttribute.count()>0):
+            self.CboHubAttribute.setCurrentIndex(0) 
+                
+    def run(self):             	
+        self.LblStatus.clear()	
+        gridlayer= self.CboGrid.currentLayer()
+        hublayer = self.CboHub.currentLayer()
+        hubfield = self.CboHubAttribute.currentText()  
+        output = str(self.output_file_name.filePath())     
+      
+        if gridlayer is None or hublayer is None:
+            return u'No selected layers!'        
+        message = urscape_hub(gridlayer,hublayer,hubfield,output,self.urscape_status_callback)
+        if message != None:
+            QMessageBox.critical(self.iface.mainWindow(), "Create Grid", message)	
+        else: 
+            self.LblStatus.setText('Completed')   
+        return
+
+# --------------------------------------------------------
+#    Raster Value to Grid
+# --------------------------------------------------------
+class urscape_raster_dialog(urscape_dialog, Ui_urscape_raster_form):		
+    def __init__(self, iface):
+        urscape_dialog.__init__(self, iface)		
+        self.setupUi(self)	
+        self.CboGrid.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.CboRaster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.CboBand.setLayer (self.CboRaster.currentLayer())
+        self.CboRaster.activated.connect(self.update_band)
+
+        self.BtnApplyClose.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.run)
+        self.urscape_set_status_bar(self.status,self.LblStatus)	
+        self.urscape_initialize_spatial_output_file_widget(self.output_file_name,'raster2grid')
+
+    def update_band(self):
+        self.CboBand.setLayer (self.CboRaster.currentLayer())	
+        if (self.CboBand.count()>0):
+            self.CboBand.setCurrentIndex(0) 
+                
+    def run(self):             	
+        self.LblStatus.clear()	
+        grid = self.CboGrid.currentLayer()
+        raster = self.CboRaster.currentLayer()
+        band = self.CboBand.currentBand()  
+        output = str(self.output_file_name.filePath())     
+      
+        if grid is None or raster is None:
+            return u'No selected layers!'        
+        message = urscape_raster(grid,raster,band,output,self.urscape_status_callback)
+        if message != None:
+            QMessageBox.critical(self.iface.mainWindow(), "Raster Value to Grid", message)	
+        else: 
+            self.LblStatus.setText('Completed')   
+        return
+
+# --------------------------------------------------------
+#    Building Area per Grid Cell
+# --------------------------------------------------------
+class urscape_build_dialog(urscape_dialog, Ui_urscape_build_form):		
+    def __init__(self, iface):
+        urscape_dialog.__init__(self, iface)		
+        self.setupUi(self)	
+        self.CboGrid.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.CboHouse.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.CboFloor.setLayer (self.CboHouse.currentLayer())
+        self.CboFloor.setFilters(QgsFieldProxyModel.Numeric )
+        self.CboHouse.activated.connect(self.update_field)
+
+        self.BtnApplyClose.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.run)
+        self.urscape_set_status_bar(self.status,self.LblStatus)	
+        self.urscape_initialize_spatial_output_file_widget(self.output_file_name,'grid_built_area')
+
+    def update_field(self):
+        self.CboFloor.setLayer (self.CboHouse.currentLayer())	
+
+                
+    def run(self):             	
+        self.LblStatus.clear()	
+        grid = self.CboGrid.currentLayer()
+        house = self.CboHouse.currentLayer()
+        floor = self.CboFloor.currentText() 
+        output = str(self.output_file_name.filePath())     
+      
+        if grid is None or house is None:
+            return u'No selected layers!'        
+        message = urscape_build(grid,house,floor,output,self.urscape_status_callback)
+        if message != None:
+            QMessageBox.critical(self.iface.mainWindow(), "Building Area per Grid Cell", message)	
+        else: 
+            self.LblStatus.setText('Completed')   
+        return
+
+# --------------------------------------------------------
+#    Population per Grid Cell
+# --------------------------------------------------------
+class urscape_pop_dialog(urscape_dialog, Ui_urscape_pop_form):		
+    def __init__(self, iface):
+        urscape_dialog.__init__(self, iface)		
+        self.setupUi(self)	
+        self.CboDistrict.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.CboDistrict.activated.connect(self.update_district_field)
+        self.CboDistrictPop.setFilters(QgsFieldProxyModel.Numeric )
+
+        self.CboGrid.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.CboGrid.activated.connect(self.update_grid_field)
+        self.CboGridBuildingArea.setFilters(QgsFieldProxyModel.Numeric )
+
+
+        self.BtnApplyClose.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.run)
+        self.urscape_set_status_bar(self.status,self.LblStatus)	
+        self.urscape_initialize_spatial_output_file_widget(self.output_file_name,'grid_pop')
+
+    def update_district_field(self):
+        self.CboDistrictPop.setLayer (self.CboDistrict.currentLayer())	
+    
+    def update_grid_field(self):
+        self.CboGridBuildingArea.setLayer (self.CboGrid.currentLayer())	
+
+                
+    def run(self):             	
+        self.LblStatus.clear()	
+        district = self.CboDistrict.currentLayer()
+        district_pop = self.CboDistrictPop.currentText()
+        grid = self.CboGrid.currentLayer()
+        grid_building_area = self.CboGridBuildingArea.currentText()        
+        output = str(self.output_file_name.filePath())     
+      
+        if district is None or grid is None:
+            return u'No selected layers!'        
+        message = urscape_pop(district,district_pop,grid,grid_building_area, output,self.urscape_status_callback)
+        if message != None:
+            QMessageBox.critical(self.iface.mainWindow(), "Building Area per Grid Cell", message)	
+        else: 
+            self.LblStatus.setText('Completed')   
         return
 
 # --------------------------------------------------------

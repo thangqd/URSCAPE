@@ -84,10 +84,10 @@ class Ui_urscape_creategrid_form(object):
     def retranslateUi(self, urscape_creategrid_form):
         _translate = QtCore.QCoreApplication.translate
         urscape_creategrid_form.setWindowTitle(_translate("urscape_creategrid_form", "Create Grid"))
-        self.LblGridType.setText(_translate("urscape_creategrid_form", "Grid type"))
-        self.LblCellsize.setText(_translate("urscape_creategrid_form", "Cell size (m)"))
-        self.LblLayers.setText(_translate("urscape_creategrid_form", "Excluded layers (Polygon)"))
-        self.LblGridExtend.setText(_translate("urscape_creategrid_form", "Grid extend"))
+        self.LblGridType.setText(_translate("urscape_creategrid_form", "Grid Type"))
+        self.LblCellsize.setText(_translate("urscape_creategrid_form", "Cell Size (m)"))
+        self.LblLayers.setText(_translate("urscape_creategrid_form", "Excluded Layers (Polygon)"))
+        self.LblGridExtend.setText(_translate("urscape_creategrid_form", "Grid Extend"))
         self.lsLayers.setSortingEnabled(True)
         self.CboGridType.setItemText(0, _translate("urscape_creategrid_form", "Point"))
         self.CboGridType.setItemText(1, _translate("urscape_creategrid_form", "Line"))

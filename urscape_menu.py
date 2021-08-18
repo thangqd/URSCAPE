@@ -39,9 +39,37 @@ class urscape_menu ():
         self.creategrid_action = QAction(icon, u'Create Grid', self.iface.mainWindow())
         self.creategrid_action.triggered.connect(self.creategrid)
         self.utilities_menu.addAction(self.creategrid_action)
+
+         # Hub Distance SubMenu
+        icon = QIcon(os.path.dirname(__file__) + "/icons/urscape_hub.png")
+        self.urscape_menu.addMenu(self.utilities_menu)	        
+        self.hub_action = QAction(icon, u'Hub Distance', self.iface.mainWindow())
+        self.hub_action.triggered.connect(self.hub)
+        self.utilities_menu.addAction(self.hub_action)
+
+        # Raster Value to Grid
+        icon = QIcon(os.path.dirname(__file__) + "/icons/urscape_raster.png")
+        self.urscape_menu.addMenu(self.utilities_menu)	        
+        self.raster_action = QAction(icon, u'Raster Value to Grid', self.iface.mainWindow())
+        self.raster_action.triggered.connect(self.raster)
+        self.utilities_menu.addAction(self.raster_action)
+
+        # Building Area per Grid Cell
+        icon = QIcon(os.path.dirname(__file__) + "/icons/urscape_build.png")
+        self.urscape_menu.addMenu(self.utilities_menu)	        
+        self.build_action = QAction(icon, u'Building Area per Grid Cell', self.iface.mainWindow())
+        self.build_action.triggered.connect(self.build)
+        self.utilities_menu.addAction(self.build_action)
+
+        # Population per Grid Cell
+        icon = QIcon(os.path.dirname(__file__) + "/icons/urscape_pop.png")
+        self.urscape_menu.addMenu(self.utilities_menu)	        
+        self.pop_action = QAction(icon, u'Population per Grid Cell', self.iface.mainWindow())
+        self.pop_action.triggered.connect(self.pop)
+        self.utilities_menu.addAction(self.pop_action)
               
         
-        # Create Grid SubMenu
+        # QGIS 2 UrScape SubMenu
         icon = QIcon(os.path.dirname(__file__) + "/icons/urscape_urscape.png")
         self.urscape_menu.addMenu(self.utilities_menu)	        
         self.importer_action = QAction(icon, u'Urscape Importer', self.iface.mainWindow())
@@ -319,10 +347,27 @@ class urscape_menu ():
             self.iface.removePluginMenu("&urscape", self.basemap_menu.menuAction())
         
          
-            ##########################	
+    ##########################	
     def creategrid(self):
         dialog = urscape_creategrid_dialog(self.iface)
-        dialog.exec_()    
+        dialog.exec_()
+
+    def hub(self):
+        dialog = urscape_hub_dialog(self.iface)
+        dialog.exec_()   
+
+    def raster(self):
+        dialog = urscape_raster_dialog(self.iface)
+        dialog.exec_()   
+    
+    def build(self):
+        dialog = urscape_build_dialog(self.iface)
+        dialog.exec_()
+    
+    def pop(self):
+        dialog = urscape_pop_dialog(self.iface)
+        dialog.exec_()
+
 
     def importer(self):
         dialog = urscape_importer_dialog(self.iface)

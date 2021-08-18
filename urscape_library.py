@@ -78,19 +78,21 @@ basemap_urls = ['mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}','mt1.google.com/vt/
                 ]                 
 
 #--------------------------------------------------------
-#    Add basemap
+#    create GRID
 # --------------------------------------------------------
-def urscape_creategrid(gridtype,layer,cellsize, gridCRS,output,status_callback = None):		
-    ## create skeleton/ media axis  
+def urscape_creategrid(gridtype,layer,cellsize,gridCRS,output,status_callback = None):		
+    ## create grid  
     i = 0
     steps = 2
+    if gridCRS.isGeographic():
+        cellsize = cellsize*10**(-5) # degree to meter
+           
     parameters1 = { 'TYPE': gridtype,
                    'EXTENT': layer.extent(),
                    'CRS': gridCRS,			
                    'HSPACING' : cellsize,		
                    'VSPACING' : cellsize,
                    'OUTPUT' : 'memory:grid_unclip'} 
-    #points = processing.runAndLoadResults('qgis:creategrid', parameters1)
     grid_unclip = processing.run('qgis:creategrid', parameters1)
     i+=1
     percent = int((i/steps)*100)
@@ -100,24 +102,35 @@ def urscape_creategrid(gridtype,layer,cellsize, gridCRS,output,status_callback =
     else:
         print(label)  
 
-    parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
-                   'OVERLAY': layer,
-                   'OUTPUT' : output} 
-    processing.runAndLoadResults('qgis:clip', parameters2)
-    i+=1 
+    if (gridtype == 1):
+        parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
+                        'OVERLAY': layer,
+                        'OUTPUT' : output} 
+        processing.runAndLoadResults('qgis:clip', parameters2)
+    else:
+        parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
+        'INTERSECT': layer,
+        # 'PREDICATE' : [0], #intersect
+        'PREDICATE' : [6], #are within
+        'OUTPUT' : output} 
+        processing.runAndLoadResults('qgis:extractbylocation', parameters2)
+        #if not (QgsWkbTypes.isMultiType(output_temp.wkbType())):    
 
+    i+=1
     percent = int((i/steps)*100)
-    label = str(i)+ '/'+ str(steps)+ '. clip'    
+    label = str(i)+ '/'+ str(steps)+ '. extractbylocation'    
     if status_callback:
         status_callback(percent,label)
     else:
-        print(label)                 
-
+        print(label)             
+  
     return
 
 def urscape_creategrid2(gridtype,layer,cellsize, gridCRS,excluded_layers,output,status_callback = None):		
     i = 0
     steps = 4
+    if gridCRS.isGeographic():
+        cellsize = cellsize*10**(-5)
     parameters1 = { 'TYPE': gridtype,
                    'EXTENT': layer.extent(),
                    'CRS': gridCRS,			
@@ -133,10 +146,20 @@ def urscape_creategrid2(gridtype,layer,cellsize, gridCRS,excluded_layers,output,
     else:
         print(label) 
 
-    parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
-                   'OVERLAY': layer,
-                   'OUTPUT' : 'memory:grid_clip'} 
-    grid_clip = processing.run('qgis:clip', parameters2)
+    if (gridtype == 1):
+        parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
+                        'OVERLAY': layer,
+                        'OUTPUT' : 'memory:grid_clip'} 
+        grid_clip = processing.run('qgis:clip', parameters2)
+    else:
+        parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
+        'INTERSECT': layer,
+        # 'PREDICATE' : [0], #intersect
+        'PREDICATE' : [6], #are within
+        'OUTPUT' : 'memory:grid_clip'} 
+        grid_clip = processing.run('qgis:extractbylocation', parameters2)
+        #if not (QgsWkbTypes.isMultiType(output_temp.wkbType())):    
+        
     i+=1
     percent = int((i/steps)*100)
     label = str(i)+ '/'+ str(steps)+ '. clip'
@@ -156,28 +179,14 @@ def urscape_creategrid2(gridtype,layer,cellsize, gridCRS,excluded_layers,output,
         status_callback(percent,label)
     else:
         print(label)         
-    
-    # parameters4 = { 
-    #             'INPUT': merge_layer['OUTPUT'],
-    #             'AGGREGATES' : [], 
-    #             'GROUP_BY' : 'NULL', 
-    #             'OUTPUT' : 'memory:aggregate_layer'} 
-    # aggregate_layer = processing.run('qgis:aggregate', parameters4)
-    # i+=1
-    # percent = int((i/steps)*100)
-    # label = str(i)+ '/'+ str(steps)+ '. aggregate'    
-    # if status_callback:
-    #     status_callback(percent,label)
-    # else:
-    #     print(label)
 
-    parameters5 = { 
+    parameters4 = { 
                 'INPUT': grid_clip['OUTPUT'],
                 'INTERSECT': merge_layer['OUTPUT'],
                 'PREDICATE' : [2] , # disjoint 
-                #'OUTPUT' : 'memory:grid_final'
                 'OUTPUT' : output}
-    processing.runAndLoadResults('qgis:extractbylocation', parameters5)
+    processing.runAndLoadResults('qgis:extractbylocation', parameters4)
+
     i+=1
     percent = int((i/steps)*100)
     label = str(i)+ '/'+ str(steps)+ '. final grid'    
@@ -185,9 +194,256 @@ def urscape_creategrid2(gridtype,layer,cellsize, gridCRS,excluded_layers,output,
         status_callback(percent,label)
     else:
         print(label)
+
     return
 
-      
+
+def urscape_hub(gridlayer,hublayer,hubfield,output,status_callback = None):		
+    ## Hub Distance 
+    i = 0
+    steps = 1
+    parameters1 = { 'INPUT': gridlayer,
+                   'HUBS': hublayer,			
+                   'FIELD' : hubfield,	
+                   'UNIT' : 0 , # met	
+                   'OUTPUT' : output} 
+    grid_unclip = processing.runAndLoadResults('qgis:distancetonearesthubpoints', parameters1)
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. hub distance'    
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)   
+
+    return
+
+def urscape_raster(grid,raster,band,output,status_callback = None):		
+    ## Raster Values to Grid
+    i = 0
+    steps = 2
+    parameters1 = { 
+                   'INPUT_RASTER': raster,		
+                   'RASTER_BAND': band,		
+                   'FIELD_NAME': 'VALUE',	
+                   'OUTPUT' : 'memory:raster_points'} 
+    raster_points = processing.run('qgis:pixelstopoints', parameters1)
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Raster to Points'    
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label) 
+   
+    parameters2 = { 
+                   'INPUT': grid,	
+                   'JOIN': raster_points['OUTPUT'],
+                   'DISCARD_NONMATCHING' : False,
+                   'JOIN_FIELDS' : ['VALUE'],
+                   'PREDICATE' : [1], #contains
+                   'SUMMARIES' : [6], #mean                   	
+                   'OUTPUT' : output} 
+    processing.runAndLoadResults('qgis:joinbylocationsummary', parameters2)
+    QgsProject.instance().addMapLayer(raster_points['OUTPUT'])
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Spatial Join (Summary)'    
+
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)      
+    return
+
+def urscape_build(grid,house,floor,output,status_callback = None):		
+    ## Building Area per Grid Cell
+    i = 0
+    steps = 3
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Intersection'    
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label) 
+    
+    parameters1 = { 
+                'INPUT': house,	
+                'INPUT_FIELDS' : [],
+                'OVERLAY': grid,
+                'OVERLAY_FIELDS' : [],		
+                'OVERLAY_FIELDS_PREFIX' : 'grid_' ,	
+                'OUTPUT' : 'memory:intersection'} 
+    intersection = processing.run('qgis:intersection', parameters1)
+    
+    layer = intersection['OUTPUT']
+    layer.dataProvider().addAttributes([QgsField("area",  QVariant.Double,"Double", 12, 4)]) # define/add field data type
+    layer.dataProvider().addAttributes([QgsField("built_area",  QVariant.Double,"Double", 12, 4)]) # define/add field data type
+    layer.updateFields()
+   
+    featurecount =0
+    totalfeaturecount = layer.featureCount()
+    fieldnumber = layer.fields().count()
+    
+    layer.startEditing()
+   
+    for feature in  layer.getFeatures(): 
+        d = QgsDistanceArea()
+        area = d.convertAreaMeasurement(d.measureArea(feature.geometry()),0) #convert to meters
+        layer.changeAttributeValue(feature.id(),fieldnumber-2,area) 
+        try:
+            floor_number =  feature[layer.dataProvider().fieldNameIndex(floor)]          
+        except:
+            floor_number = 1
+        layer.changeAttributeValue(feature.id(),fieldnumber-1,area*floor_number)  
+    layer.commitChanges()  
+    #QgsProject.instance().addMapLayer(layer)
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Calculate built area'    
+    
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label) 
+
+    parameters2 = { 
+                   'INPUT': grid,	
+                   'JOIN': layer,
+                   'DISCARD_NONMATCHING' : False,
+                   'JOIN_FIELDS' : ['built_area'],
+                   'PREDICATE' : [1], #contains
+                   'SUMMARIES' : [5], #sum                   	
+                   'OUTPUT' : output} 
+    processing.runAndLoadResults('qgis:joinbylocationsummary', parameters2)
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Spatial Join (Summary)'    
+
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)       
+
+    return
+
+def urscape_pop(district,district_pop,grid,grid_building_area, output,status_callback = None):	
+    # Population per Grid Cell
+    i = 0
+    steps = 4
+    # Creat centroids of Grid Cell
+    parameters1 = { 
+                   'INPUT': grid,	
+                   'ALL_PARTS' : False,
+                   'OUTPUT' : 'memory:grid_centroid'} 
+    grid_centroid = processing.run('qgis:centroids', parameters1)
+    grid_centroid_layer = grid_centroid['OUTPUT']
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Centroids'    
+    
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label) 
+
+    # Calculate building area per district
+    parameters2 = { 
+                #    'INPUT': QgsProcessingFeatureSourceDefinition(district.id(),flags=QgsProcessingFeatureSourceDefinition.FlagOverrideDefaultGeometryCheck, geometryCheck=QgsFeatureRequest.GeometrySkipInvalid),
+                #    'JOIN': QgsProcessingFeatureSourceDefinition(grid_centroid['OUTPUT'].id(),flags=QgsProcessingFeatureSourceDefinition.FlagOverrideDefaultGeometryCheck, geometryCheck=QgsFeatureRequest.GeometrySkipInvalid),
+                   'INPUT': district,
+                   'JOIN': grid_centroid_layer,
+                   'DISCARD_NONMATCHING' : False,
+                   'JOIN_FIELDS' : [grid_building_area],
+                   'PREDICATE' : [1], #contains
+                   'SUMMARIES' : [5], #sum                   	
+                   'OUTPUT' : 'memory:district_built_area'} 
+    district_built_area = processing.run('qgis:joinbylocationsummary', parameters2)
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Spatial Join (Summary)'    
+
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)       
+
+    # Calculate pop density per district
+    district_pop_dens_layer = district_built_area['OUTPUT']
+    district_pop_dens_layer.dataProvider().addAttributes([QgsField("pop_dens",  QVariant.Double,"Double", 12, 4)]) # define/add field data type
+    district_pop_dens_layer.updateFields()
+   
+    fieldnumber = district_pop_dens_layer.fields().count()
+    
+    district_pop_dens_layer.startEditing()   
+    for feature in  district_pop_dens_layer.getFeatures(): 
+        try:
+            pop_dens = feature[district_pop_dens_layer.dataProvider().fieldNameIndex(district_pop)] / feature[fieldnumber-2]  # diện tích xây dựng   
+        except:
+            pop_dens = -1 # không tính được diện tích xây dựng trên mỗi quận huyện        
+        district_pop_dens_layer.changeAttributeValue(feature.id(),fieldnumber-1,pop_dens)  
+    district_pop_dens_layer.commitChanges()  
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Spatial Join (Summary)'    
+
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)   
+    
+    
+    # pop density per grid_centroids  
+    parameters2 = { 
+                   'INPUT': grid_centroid_layer,	
+                   'JOIN': district_pop_dens_layer,
+                   'DISCARD_NONMATCHING' : False,
+                   'JOIN_FIELDS' : ["pop_dens"],
+                   'METHOD' : 0, 
+                   'PREDICATE' : [5], #within
+                   'PREFIX' : '' ,
+                   'OUTPUT' : 'memory:grid_centroid_pop_dens'} 
+    grid_centroid_pop_dens = processing.run('qgis:joinattributesbylocation', parameters2)
+
+    parameters3 = { 
+                   'INPUT': grid,	
+                   'JOIN': grid_centroid_pop_dens['OUTPUT'],
+                   'DISCARD_NONMATCHING' : False,
+                   'JOIN_FIELDS' :["pop_dens"],
+                   'METHOD' : 0, 
+                   'PREDICATE' : [1], #contains
+                   'PREFIX' : '' ,
+                   'OUTPUT' : 'memory:grid_pop'} 
+    grid_pop = processing.run('qgis:joinattributesbylocation', parameters3)
+    grid_pop_layer  = grid_pop['OUTPUT']
+    
+     # Population per grid cell
+    grid_pop_layer.dataProvider().addAttributes([QgsField("pop",  QVariant.Double,"Double", 12,0)]) # define/add field data type
+    grid_pop_layer.updateFields()
+    
+    pop_idx = grid_pop_layer.fields().count() -1
+    grid_pop_layer.startEditing()   
+    for feature in  grid_pop_layer.getFeatures(): 
+        pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)] * feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
+        #pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)]
+        #pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
+        grid_pop_layer.changeAttributeValue(feature.id(),pop_idx,pop)         
+    grid_pop_layer.commitChanges()  
+    i+=1
+    percent = int((i/steps)*100)
+    label = str(i)+ '/'+ str(steps)+ '. Pop per Grid Cell'    
+
+    if status_callback:
+        status_callback(percent,label)
+    else:
+        print(label)   
+
+    QgsProject.instance().addMapLayer(district_pop_dens_layer)
+    QgsProject.instance().addMapLayer(grid_pop_layer)
+    return
+
+
 #--------------------------------------------------------
 #    Add basemap
 # --------------------------------------------------------

@@ -294,7 +294,6 @@ class urscape_pop_dialog(urscape_dialog, Ui_urscape_pop_form):
 
         self.BtnApplyClose.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.run)
         self.urscape_set_status_bar(self.status,self.LblStatus)	
-        self.urscape_initialize_spatial_output_file_widget(self.output_file_name,'grid_pop')
 
     def update_district_field(self):
         self.CboDistrictPop.setLayer (self.CboDistrict.currentLayer())	
@@ -309,11 +308,10 @@ class urscape_pop_dialog(urscape_dialog, Ui_urscape_pop_form):
         district_pop = self.CboDistrictPop.currentText()
         grid = self.CboGrid.currentLayer()
         grid_building_area = self.CboGridBuildingArea.currentText()        
-        output = str(self.output_file_name.filePath())     
       
         if district is None or grid is None:
             return u'No selected layers!'        
-        message = urscape_pop(district,district_pop,grid,grid_building_area, output,self.urscape_status_callback)
+        message = urscape_pop(district,district_pop,grid,grid_building_area, self.urscape_status_callback)
         if message != None:
             QMessageBox.critical(self.iface.mainWindow(), "Building Area per Grid Cell", message)	
         else: 

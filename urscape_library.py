@@ -328,7 +328,7 @@ def urscape_build(grid,house,floor,output,status_callback = None):
 
     return
 
-def urscape_pop(district,district_pop,grid,grid_building_area, output,status_callback = None):	
+def urscape_pop(district,district_pop,grid,grid_building_area, status_callback = None):	
     # Population per Grid Cell
     i = 0
     steps = 4
@@ -371,7 +371,7 @@ def urscape_pop(district,district_pop,grid,grid_building_area, output,status_cal
 
     # Calculate pop density per district
     district_pop_dens_layer = district_built_area['OUTPUT']
-    district_pop_dens_layer.dataProvider().addAttributes([QgsField("pop_dens",  QVariant.Double,"Double", 12, 4)]) # define/add field data type
+    district_pop_dens_layer.dataProvider().addAttributes([QgsField("pop_dens",  QVariant.Double,"Double", 12, 6)]) # define/add field data type
     district_pop_dens_layer.updateFields()
    
     fieldnumber = district_pop_dens_layer.fields().count()
@@ -415,21 +415,31 @@ def urscape_pop(district,district_pop,grid,grid_building_area, output,status_cal
                    'PREDICATE' : [1], #contains
                    'PREFIX' : '' ,
                    'OUTPUT' : 'memory:grid_pop'} 
-    grid_pop = processing.run('qgis:joinattributesbylocation', parameters3)
-    grid_pop_layer  = grid_pop['OUTPUT']
-    
-     # Population per grid cell
-    grid_pop_layer.dataProvider().addAttributes([QgsField("pop",  QVariant.Double,"Double", 12,0)]) # define/add field data type
-    grid_pop_layer.updateFields()
-    
-    pop_idx = grid_pop_layer.fields().count() -1
-    grid_pop_layer.startEditing()   
-    for feature in  grid_pop_layer.getFeatures(): 
-        pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)] * feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
-        #pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)]
-        #pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
-        grid_pop_layer.changeAttributeValue(feature.id(),pop_idx,pop)         
-    grid_pop_layer.commitChanges()  
+    grid_pop_temp = processing.run('qgis:joinattributesbylocation', parameters3)
+   
+    # Population per grid cell
+    # grid_pop_layer  = grid_pop['OUTPUT']    
+    # grid_pop_layer.dataProvider().addAttributes([QgsField("pop",QVariant.Int)]) # define/add field data type
+    # grid_pop_layer.updateFields()
+    # pop_idx = grid_pop_layer.fields().count() -1
+    # grid_pop_layer.startEditing()   
+    # for feature in  grid_pop_layer.getFeatures(): 
+    #     #pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)] * feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
+    #     pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex(grid_building_area)]
+    #     pop =  feature[grid_pop_layer.dataProvider().fieldNameIndex("pop_dens")]
+    #     grid_pop_layer.changeAttributeValue(feature.id(),pop_idx,pop)         
+    # grid_pop_layer.commitChanges()  
+       
+    parameter4 = { 'INPUT': grid_pop_temp['OUTPUT'],
+                   'FIELD_NAME' : 'pop',
+                   'FIELD_TYPE' : 1, #Integer
+                   'FORMULA' : ' \"built_area\" * \"pop_dens\"',
+                   'OUTPUT' : 'memory:grid_pop' 
+                }
+    grid_pop = processing.run('qgis:fieldcalculator', parameter4)['OUTPUT']
+    QgsProject.instance().addMapLayer(district_pop_dens_layer)
+    QgsProject.instance().addMapLayer(grid_pop)
+   
     i+=1
     percent = int((i/steps)*100)
     label = str(i)+ '/'+ str(steps)+ '. Pop per Grid Cell'    
@@ -439,8 +449,7 @@ def urscape_pop(district,district_pop,grid,grid_building_area, output,status_cal
     else:
         print(label)   
 
-    QgsProject.instance().addMapLayer(district_pop_dens_layer)
-    QgsProject.instance().addMapLayer(grid_pop_layer)
+
     return
 
 

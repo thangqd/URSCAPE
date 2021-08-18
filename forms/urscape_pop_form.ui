@@ -46,17 +46,17 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="0" colspan="2">
+     <item row="8" column="0" colspan="2">
       <widget class="QLabel" name="LblStatus">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
-     <item row="8" column="0" colspan="2">
-      <widget class="QLabel" name="LblOutput">
-       <property name="text">
-        <string>Output</string>
+     <item row="5" column="0" colspan="2">
+      <widget class="QgsMapLayerComboBox" name="CboGrid">
+       <property name="showCrs" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -67,17 +67,14 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="0" colspan="2">
-      <widget class="QgsFileWidget" name="output_file_name" native="true"/>
-     </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QgsMapLayerComboBox" name="CboGrid">
-       <property name="showCrs" stdset="0">
-        <bool>true</bool>
+     <item row="6" column="0" colspan="2">
+      <widget class="QLabel" name="LblGridBuildingArea">
+       <property name="text">
+        <string>Building Area per Grid Cell Field</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="0" colspan="2">
+     <item row="9" column="0" colspan="2">
       <widget class="QProgressBar" name="status">
        <property name="value">
         <number>24</number>
@@ -86,13 +83,6 @@
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="QgsFieldComboBox" name="CboDistrictPop"/>
-     </item>
-     <item row="6" column="0" colspan="2">
-      <widget class="QLabel" name="LblGridBuildingArea">
-       <property name="text">
-        <string>Building Area per Grid Cell Field</string>
-       </property>
-      </widget>
      </item>
      <item row="7" column="0" colspan="2">
       <widget class="QgsFieldComboBox" name="CboGridBuildingArea"/>
@@ -113,11 +103,6 @@
    <class>QgsFieldComboBox</class>
    <extends>QComboBox</extends>
    <header>qgsfieldcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsFileWidget</class>
-   <extends>QWidget</extends>
-   <header>qgsfilewidget.h</header>
   </customwidget>
   <customwidget>
    <class>QgsMapLayerComboBox</class>

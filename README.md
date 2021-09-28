@@ -1,4 +1,8 @@
 Visit: https://thangqd.github.io/URSCAPE/
+References: 
+- https://github.com/UrbanRuralSystems/ur-scape
+- https://urs.sec.sg/
+
 
 # Tools for URSCAPE Data Import
 

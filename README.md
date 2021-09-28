@@ -1,6 +1,6 @@
 Visit: https://thangqd.github.io/URSCAPE/ <br />
 References:<br />
-- URSCAPE Sourcecode: https://github.com/UrbanRuralSystems/ur-scape
+- URSCAPE Source code: https://github.com/UrbanRuralSystems/ur-scape
 - URSCAPE Homepage: https://urs.sec.sg/
 
 

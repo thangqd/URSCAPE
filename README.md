@@ -1,12 +1,11 @@
 # About
-Visit: https://thangqd.github.io/URSCAPE/ <br />
+This tools is one of the results of the scientific research project: "Research and apply URSCAPE in supporting decision support process based on natural resources and environmen data". ([Bui Hong Son](https://www.facebook.com/SHON.OGC) et.al, 2021)
 References:<br />
 - URSCAPE Source code: https://github.com/UrbanRuralSystems/ur-scape
 - URSCAPE Home page: https://urs.sec.sg/<br />
 - Powered by: [HCMGIS](https://hcmgis.vn/), [HCMC DOST](https://dost.hochiminhcity.gov.vn/), [Bui Hong Son](https://www.facebook.com/SHON.OGC), [HCM DONRE](http://www.donre.hochiminhcity.gov.vn/)<br />
 
-This tools is one of the results of the scientific research project: "Research and apply URSCAPE in supporting decision support process based on natural resources and environmen data". ([Bui Hong Son](https://www.facebook.com/SHON.OGC) et.al, 2021)
-
+Visit: https://thangqd.github.io/URSCAPE/ <br />
 
 # Tools for URSCAPE Data Import
 

@@ -1,5 +1,3 @@
-Visit: https://thangqd.github.io/URSCAPE/
-
 # URSCAPE - Create Grid, Hub Distance, Raster Value to Grid, Building Area per Grid Cell, Population per Grid Cell, Urscape Importer and Basemap
 
 **- Create GRID**: Creat Grid (Point/ Line/ Rectangle, Diamond, Hexagon), Clipped by Layer extend 
@@ -21,7 +19,4 @@ Visit: https://thangqd.github.io/URSCAPE/
 
 
 **- Basemap**: Add dozens of global basemaps from Google, Carto, ESRI, OSM Stamen, etc.
-
-![image](https://user-images.githubusercontent.com/1776420/130006553-f4264523-9649-4a5d-90ed-0e6634f150ac.png)
-
 

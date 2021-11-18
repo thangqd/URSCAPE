@@ -85,7 +85,7 @@ def urscape_creategrid(gridtype,layer,cellsize,gridCRS,output,status_callback = 
     i = 0
     steps = 2
     if gridCRS.isGeographic():
-        cellsize = cellsize*10**(-5) # degree to meter
+        cellsize = cellsize*10**(-5) # meter to degree
            
     parameters1 = { 'TYPE': gridtype,
                    'EXTENT': layer.extent(),

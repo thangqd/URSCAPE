@@ -66,9 +66,24 @@ onlyYear = False
 """---------------------------------------------------------------------
 You can't touch this
 ---------------------------------------------------------------------"""
-import gdal, os, sys, osr, processing, csv, math, colorsys,traceback,numpy,datetime,numbers,shutil 
+import os, sys,  processing, csv, math, colorsys,traceback,numpy,datetime,numbers,shutil 
+try:
+    from osgeo import gdal
+except ImportError:
+    import gdal
+
+try:
+    from osgeo import osr
+except ImportError:
+    import osr
+
 from tempfile import mkstemp
-from gdalconst import *
+
+try:
+    from osgeo.gdalconst import *
+except ImportError:
+    from gdalconst import *
+
 from qgis.core import (QgsProject
                       ,QgsDistanceArea
                       ,QgsCoordinateReferenceSystem

@@ -1,0 +1,84 @@
+[33mcommit 65fb569fef97992755a3124aa5ab020441a245b1[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 19 11:40:00 2021 +0700
+
+    Update README.md
+
+[33mcommit 233ae49f1953139714408d248adb6e4e9f75f652[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 19 11:33:16 2021 +0700
+
+    Set theme jekyll-theme-dinky
+
+[33mcommit f5dd5a9f0796610d16eddbfa1fbe34b00fdc6afc[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 19 11:13:19 2021 +0700
+
+    Update README.md
+
+[33mcommit 4dcbeb6777e16966b0b83c5d70c0b9944e80b47b[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Wed Aug 18 18:13:02 2021 +0700
+
+    delete pycache
+
+[33mcommit 612a65f9eff0c0ee652abbde6d58d68654bf4d0b[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Wed Aug 18 18:11:46 2021 +0700
+
+    Delete _config.yml
+
+[33mcommit 8015a3b076106774df0963150cc314a1ef8a9cbe[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Wed Aug 18 18:10:53 2021 +0700
+
+    Ver 21.8.8
+    
+    Ver 21.8.8
+
+[33mcommit bf7325f1097e5f9aba8ce8393962820218e77348[m
+Merge: a9b7679 a869991
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Wed Aug 18 16:17:16 2021 +0700
+
+    Merge branch 'main' of https://github.com/thangqd/URSCAPE into main
+
+[33mcommit a9b7679ed1ced32d68fbfca188b30be079007463[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Wed Aug 18 16:17:11 2021 +0700
+
+    ver 0.9
+    
+    ver 0.9
+
+[33mcommit a869991263d4a0868c65d8850ba3fc4a276b829c[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Mon Aug 16 09:49:29 2021 +0700
+
+    Set theme jekyll-theme-architect
+
+[33mcommit c0c5f2c962987e0dd790472b6b39001895169170[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Mon Aug 16 09:48:50 2021 +0700
+
+    Set theme jekyll-theme-midnight
+
+[33mcommit ad20d23fa0c9f5e0ad24f68b7788ada6bb213c98[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 12 09:50:23 2021 +0700
+
+    Update metadata.txt
+
+[33mcommit 22f8f4916d00798d1d624f289fc2d7d1ddfa3fb8[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 12 09:48:40 2021 +0700
+
+    Update metadata.txt
+
+[33mcommit 9b1dc5814714af60a989e432288c49bf98f78686[m
+Author: Quach Dong Thang <quachdongthang@gmail.com>
+Date:   Thu Aug 12 09:46:13 2021 +0700
+
+    First version
+    
+    First version

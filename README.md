@@ -1,21 +1,23 @@
-About
-This tool is one of the results of the scientific research project: “Research and apply URSCAPE in supporting decision support process based on natural resources and environment data”. (Bui Hong Son et.al, 2021).
-Powered by: HCMGIS (HCMC DOST), Bui Hong Son (HCM DONRE)
-Visit: https://thangqd.github.io/URSCAPE/
-References:
-URSCAPE Source code: https://github.com/UrbanRuralSystems/ur-scape
-URSCAPE Home page: https://urs.sec.sg/
-Tools for URSCAPE Data Import
-Create GRID: Creat Grid (Point/ Line/ Rectangle, Diamond, Hexagon), Clipped by Layer extend
+# About
+- This tool is one of the results of the scientific research project: "Research and apply URSCAPE in supporting decision support process based on natural resources and environment data". ([Bui Hong Son](https://www.facebook.com/SHON.OGC) et.al, 2021).<br />
+- Powered by: [HCMGIS](https://hcmgis.vn/) ([HCMC DOST](https://dost.hochiminhcity.gov.vn/)), [Bui Hong Son](https://www.facebook.com/SHON.OGC) ([HCM DONRE](http://www.donre.hochiminhcity.gov.vn/))<br />
+- Visit: [https://thangqd.github.io/URSCAPE/](https://thangqd.github.io/URSCAPE/) <br />
+References:<br />
+- URSCAPE Source code: [https://github.com/UrbanRuralSystems/ur-scape](https://github.com/UrbanRuralSystems/ur-scape)
+- URSCAPE Home page: [https://urs.sec.sg/](https://github.com/UrbanRuralSystems/ur-scape)<br />
 
-Hub Distance: Min Distance between Grid Layer and Hub Layer
+# Tools for URSCAPE Data Import
+- Create GRID: Creat Grid (Point/ Line/ Rectangle, Diamond, Hexagon), Clipped by Layer extend
 
-Raster Value to Grid: Read mean value of raster cells into grid cells
+- Hub Distance: Min Distance between Grid Layer and Hub Layer
 
-Building Area per Grid Cell: Calculate Building Area per Grid Cell based on House Layer
+- Raster Value to Grid: Read mean value of raster cells into grid cells
 
-Population per Grid Cell: Calculate Population Area per Grid Cell based on District Population Density
+- Building Area per Grid Cell: Calculate Building Area per Grid Cell based on House Layer
 
-Urscape Importer: Import Data from QGIS into Urscape
+- Population per Grid Cell: Calculate Population Area per Grid Cell based on District Population Density
 
-Basemap: Add dozens of global basemaps from Google, Carto, ESRI, OSM Stamen, etc.
+- Urscape Importer: Import Data from QGIS into Urscape
+
+- Basemap: Add dozens of global basemaps from Google, Carto, ESRI, OSM Stamen, etc.
+

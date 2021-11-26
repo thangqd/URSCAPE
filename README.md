@@ -9,7 +9,7 @@ References:<br />
 - Select Code --> Download ZIP.<br />
 ![image](https://user-images.githubusercontent.com/1776420/143521182-997da7cd-b0a4-4426-a4e7-5e4ef2420b6d.png)
 
-- In QGIS, go to Plugins  Manage and Install Plugins menu -->  Install from ZIP --> Browse to dowloaded ZIP file --> Install Plugin<br />
+- In QGIS, go to Manage and Install Plugins menu -->  Install from ZIP --> Browse to dowloaded ZIP file --> Install Plugin<br />
 ![image](https://user-images.githubusercontent.com/1776420/143521322-df2041a8-5e80-4ebd-a297-148b877d881d.png)
 
 - Enjoy the URSCAPE Plugin<br />

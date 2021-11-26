@@ -1,5 +1,5 @@
 # About
-- This tool is one of the results of the scientific research project: "Research and apply URSCAPE in supporting decision support process based on natural resources and environment data". ([Bui Hong Son](https://www.facebook.com/SHON.OGC) et.al, 2021).<br />
+- This tool is one of the results of the scientific research project: "Research and apply URSCAPE in decision support process based on natural resources and environment data". ([Bui Hong Son](https://www.facebook.com/SHON.OGC) et.al, 2021).<br />
 - Powered by: [HCMGIS](https://hcmgis.vn/) ([HCMC DOST](https://dost.hochiminhcity.gov.vn/)), [Bui Hong Son](https://www.facebook.com/SHON.OGC) ([HCMC DONRE](http://www.donre.hochiminhcity.gov.vn/))<br />
 - Visit: [https://thangqd.github.io/URSCAPE/](https://thangqd.github.io/URSCAPE/) <br />
 References:<br />

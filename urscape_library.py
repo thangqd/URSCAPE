@@ -110,8 +110,8 @@ def urscape_creategrid(gridtype,layer,cellsize,gridCRS,output,status_callback = 
     else:
         parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
         'INTERSECT': layer,
-        # 'PREDICATE' : [0], #intersect
-        'PREDICATE' : [6], #are within
+        'PREDICATE' : [0], #intersect
+        # 'PREDICATE' : [6], #are within
         'OUTPUT' : output} 
         processing.runAndLoadResults('qgis:extractbylocation', parameters2)
         #if not (QgsWkbTypes.isMultiType(output_temp.wkbType())):    
@@ -154,8 +154,8 @@ def urscape_creategrid2(gridtype,layer,cellsize, gridCRS,excluded_layers,output,
     else:
         parameters2 = { 'INPUT': grid_unclip['OUTPUT'],
         'INTERSECT': layer,
-        # 'PREDICATE' : [0], #intersect
-        'PREDICATE' : [6], #are within
+        'PREDICATE' : [0], #intersect
+        # 'PREDICATE' : [6], #are within
         'OUTPUT' : 'memory:grid_clip'} 
         grid_clip = processing.run('qgis:extractbylocation', parameters2)
         #if not (QgsWkbTypes.isMultiType(output_temp.wkbType())):    
